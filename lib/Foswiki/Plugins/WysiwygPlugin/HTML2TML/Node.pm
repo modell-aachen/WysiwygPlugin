@@ -1,5 +1,5 @@
 # Copyright (C) 2005 ILOG http://www.ilog.fr
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
+# and Foswiki Contributors. All Rights Reserved. Foswiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
 #
@@ -23,27 +23,27 @@
 
 =pod
 
----+ package TWiki::Plugins::WysiwygPlugin::HTML2TML::Node;
+---+ package Foswiki::Plugins::WysiwygPlugin::HTML2TML::Node;
 
 Object for storing a parsed HTML tag, and processing it
 to generate TML from the parse tree.
 
-See also TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf
+See also Foswiki::Plugins::WysiwygPlugin::HTML2TML::Leaf
 
 =cut
 
-package TWiki::Plugins::WysiwygPlugin::HTML2TML::Node;
-use base 'TWiki::Plugins::WysiwygPlugin::HTML2TML::Base';
+package Foswiki::Plugins::WysiwygPlugin::HTML2TML::Node;
+use base 'Foswiki::Plugins::WysiwygPlugin::HTML2TML::Base';
 
 use strict;
 
-use TWiki::Func; # needed for regular expressions
+use Foswiki::Func; # needed for regular expressions
 use Assert;
 
 use vars qw( $reww );
 
-require TWiki::Plugins::WysiwygPlugin::Constants;
-require TWiki::Plugins::WysiwygPlugin::HTML2TML::WC;
+require Foswiki::Plugins::WysiwygPlugin::Constants;
+require Foswiki::Plugins::WysiwygPlugin::HTML2TML::WC;
 
 =pod
 
@@ -140,7 +140,7 @@ sub _trim {
 sub hasClass {
     my ($this, $class) = @_;
     return 0 unless $this;
-    if (UNIVERSAL::isa($this, 'TWiki::Plugins::WysiwygPlugin::HTML2TML::Node')) {
+    if (UNIVERSAL::isa($this, 'Foswiki::Plugins::WysiwygPlugin::HTML2TML::Node')) {
         return hasClass($this->{attrs}, $class);
     }
     return 0 unless defined $this->{class};
@@ -151,7 +151,7 @@ sub hasClass {
 sub _removeClass {
     my ($this, $class) = @_;
     return 0 unless $this;
-    if (UNIVERSAL::isa($this, 'TWiki::Plugins::WysiwygPlugin::HTML2TML::Node')) {
+    if (UNIVERSAL::isa($this, 'Foswiki::Plugins::WysiwygPlugin::HTML2TML::Node')) {
         return _removeClass($this->{attrs}, $class);
     }
     return 0 unless hasClass($this, $class);
@@ -168,7 +168,7 @@ sub _removeClass {
 # Both object method and static method
 sub _addClass {
     my ($this, $class) = @_;
-    if (UNIVERSAL::isa($this, 'TWiki::Plugins::WysiwygPlugin::HTML2TML::Node')) {
+    if (UNIVERSAL::isa($this, 'Foswiki::Plugins::WysiwygPlugin::HTML2TML::Node')) {
         _addClass($this->{attrs}, $class);
         return;
     }
@@ -361,8 +361,8 @@ sub _collapse {
                 foreach my $meal (@edible) {
                     $meal->_remove();
                     if ($meal->{tag}) {
-                        require TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf;
-                        $node->addChild(new TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf($WC::NBBR));
+                        require Foswiki::Plugins::WysiwygPlugin::HTML2TML::Leaf;
+                        $node->addChild(new Foswiki::Plugins::WysiwygPlugin::HTML2TML::Leaf($WC::NBBR));
                         $node->_eat($meal);
                     }
                 }
@@ -559,10 +559,10 @@ sub _defaultTag {
 sub _isProtectedByAttrs {
     my $this = shift;
 
-    require TWiki::Plugins::WysiwygPlugin;
+    require Foswiki::Plugins::WysiwygPlugin;
     foreach my $attr (keys %{$this->{attrs}}) {
         next unless length($this->{attrs}->{$attr}); # ignore nulls
-        return $attr if TWiki::Plugins::WysiwygPlugin::protectedByAttr(
+        return $attr if Foswiki::Plugins::WysiwygPlugin::protectedByAttr(
             $this->{tag}, $attr);
     }
     return 0;
@@ -1051,7 +1051,7 @@ sub _handleA {
             $href = $this->{context}->{rewriteURL}->(
                 $href, $this->{context} );
         }
-        $reww = TWiki::Func::getRegularExpression('wikiWordRegex')
+        $reww = Foswiki::Func::getRegularExpression('wikiWordRegex')
           unless $reww;
         my $nop = ($options & $WC::NOP_ALL) ? '<nop>' : '';
         if( $href =~ /^(\w+\.)?($reww)(#\w+)?$/ ) {

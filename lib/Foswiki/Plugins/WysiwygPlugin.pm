@@ -1,5 +1,5 @@
 # Copyright (C) 2005 ILOG http://www.ilog.fr
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
+# and Foswiki Contributors. All Rights Reserved. Foswiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
 #
@@ -35,7 +35,7 @@ uploads.
 
 =cut
 
-package TWiki::Plugins::WysiwygPlugin;
+package Foswiki::Plugins::WysiwygPlugin;
 
 use CGI qw( :cgi -any );
 
@@ -44,9 +44,9 @@ use strict;
 use Assert;
 use Encode;
 
-require TWiki::Func;    # The plugins API
-require TWiki::Plugins; # For the API version
-require TWiki::Plugins::WysiwygPlugin::Constants;
+require Foswiki::Func;    # The plugins API
+require Foswiki::Plugins; # For the API version
+require Foswiki::Plugins::WysiwygPlugin::Constants;
 
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $SECRET_ID $NO_PREFS_IN_TOPIC );
 use vars qw( $html2tml $tml2html $recursionBlock $imgMap );
@@ -65,16 +65,16 @@ sub initPlugin {
 
     # %OWEB%.%OTOPIC% is the topic where the initial content should be
     # grabbed from, as defined in templates/edit.skin.tmpl
-    TWiki::Func::registerTagHandler('OWEB', \&_OWEBTAG);
-    TWiki::Func::registerTagHandler('OTOPIC', \&_OTOPICTAG);
-    TWiki::Func::registerTagHandler('WYSIWYG_TEXT', \&_WYSIWYG_TEXT);
-    TWiki::Func::registerTagHandler('JAVASCRIPT_TEXT', \&_JAVASCRIPT_TEXT);
-    TWiki::Func::registerTagHandler('WYSIWYG_SECRET_ID', sub { $SECRET_ID });
+    Foswiki::Func::registerTagHandler('OWEB', \&_OWEBTAG);
+    Foswiki::Func::registerTagHandler('OTOPIC', \&_OTOPICTAG);
+    Foswiki::Func::registerTagHandler('WYSIWYG_TEXT', \&_WYSIWYG_TEXT);
+    Foswiki::Func::registerTagHandler('JAVASCRIPT_TEXT', \&_JAVASCRIPT_TEXT);
+    Foswiki::Func::registerTagHandler('WYSIWYG_SECRET_ID', sub { $SECRET_ID });
 
-    TWiki::Func::registerRESTHandler('tml2html', \&_restTML2HTML);
-    TWiki::Func::registerRESTHandler('html2tml', \&_restHTML2TML);
-    TWiki::Func::registerRESTHandler('upload', \&_restUpload);
-    TWiki::Func::registerRESTHandler('attachments', \&_restAttachments);
+    Foswiki::Func::registerRESTHandler('tml2html', \&_restTML2HTML);
+    Foswiki::Func::registerRESTHandler('html2tml', \&_restHTML2TML);
+    Foswiki::Func::registerRESTHandler('upload', \&_restUpload);
+    Foswiki::Func::registerRESTHandler('attachments', \&_restAttachments);
 
 
     # Plugin correctly initialized
@@ -84,7 +84,7 @@ sub initPlugin {
 sub _OWEBTAG {
     my( $session, $params, $topic, $web ) = @_;
 
-    my $query = TWiki::Func::getCgiQuery();
+    my $query = Foswiki::Func::getCgiQuery();
 
     return $web unless $query;
 
@@ -104,7 +104,7 @@ sub _OWEBTAG {
 sub _OTOPICTAG {
     my( $session, $params, $topic, $web ) = @_;
 
-    my $query = TWiki::Func::getCgiQuery();
+    my $query = Foswiki::Func::getCgiQuery();
 
     return $topic unless $query;
 
@@ -128,13 +128,13 @@ sub startRenderingHandler {
 sub beforeEditHandler {
     #my( $text, $topic, $web, $meta ) = @_;
 
-    my $skin = TWiki::Func::getPreferencesValue( 'WYSIWYGPLUGIN_WYSIWYGSKIN' );
+    my $skin = Foswiki::Func::getPreferencesValue( 'WYSIWYGPLUGIN_WYSIWYGSKIN' );
 
-    if( $skin && TWiki::Func::getSkin() =~ /\b$skin\b/o ) {
+    if( $skin && Foswiki::Func::getSkin() =~ /\b$skin\b/o ) {
         if( notWysiwygEditable($_[0])) {
 
             # redirect
-            my $query = TWiki::Func::getCgiQuery();
+            my $query = Foswiki::Func::getCgiQuery();
             foreach my $p qw( skin cover ) {
                 my $arg = $query->param( $p );
                 if( $arg && $arg =~ s/\b$skin\b// ) {
@@ -146,7 +146,7 @@ sub beforeEditHandler {
                 }
             }
             my $url = $query->url( -full=>1, -path=>1, -query=>1 );
-            TWiki::Func::redirectCgiQuery( $query, $url );
+            Foswiki::Func::redirectCgiQuery( $query, $url );
             # Bring this session to an untimely end
             exit 0;
         }
@@ -156,7 +156,7 @@ sub beforeEditHandler {
 # This handler is only invoked *after* merging is complete
 sub beforeSaveHandler {
     #my( $text, $topic, $web ) = @_;
-    my $query = TWiki::Func::getCgiQuery();
+    my $query = Foswiki::Func::getCgiQuery();
     return unless $query;
 
     return unless defined( $query->param( 'wysiwyg_edit' ));
@@ -175,11 +175,11 @@ sub beforeMergeHandler {
 # script (so it's useless for a REST save)
 sub afterEditHandler {
     my( $text, $topic, $web ) = @_;
-    my $query = TWiki::Func::getCgiQuery();
+    my $query = Foswiki::Func::getCgiQuery();
     return unless $query;
 
-    if ($TWiki::cfg{Site}{CharSet}
-        && $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i) {
+    if ($Foswiki::cfg{Site}{CharSet}
+        && $Foswiki::cfg{Site}{CharSet} =~ /^utf-?8$/i) {
         # If the site charset is utf-8, then form POSTs (such as the one
         # that got us here) are utf-8 encoded. we have to decode to prevent
         # the HTML parser from going tits up when it sees utf-8 in the data.
@@ -203,9 +203,9 @@ sub TranslateHTML2TML {
     my( $text, $topic, $web ) = @_;
 
     unless( $html2tml ) {
-        require TWiki::Plugins::WysiwygPlugin::HTML2TML;
+        require Foswiki::Plugins::WysiwygPlugin::HTML2TML;
 
-        $html2tml = new TWiki::Plugins::WysiwygPlugin::HTML2TML();
+        $html2tml = new Foswiki::Plugins::WysiwygPlugin::HTML2TML();
     }
 
     # SMELL: really, really bad smell; bloody core should NOT pass text
@@ -244,9 +244,9 @@ sub TranslateHTML2TML {
 sub beforeCommonTagsHandler {
     #my ( $text, $topic, $web, $meta )
     return if $recursionBlock;
-    return unless TWiki::Func::getContext()->{body_text};
+    return unless Foswiki::Func::getContext()->{body_text};
 
-    my $query = TWiki::Func::getCgiQuery();
+    my $query = Foswiki::Func::getCgiQuery();
 
     return unless $query;
 
@@ -263,11 +263,11 @@ sub beforeCommonTagsHandler {
     my $web = $_[2];
     my( $meta, $text );
     my $altText = $query->param( 'templatetopic' );
-    if( $altText && TWiki::Func::topicExists( $web, $altText )) {
-        ( $web, $topic ) = TWiki::Func::normalizeWebTopicName( $web, $altText );
+    if( $altText && Foswiki::Func::topicExists( $web, $altText )) {
+        ( $web, $topic ) = Foswiki::Func::normalizeWebTopicName( $web, $altText );
     }
 
-    $_[0] = _WYSIWYG_TEXT($TWiki::Plugins::SESSION, {}, $topic, $web);
+    $_[0] = _WYSIWYG_TEXT($Foswiki::Plugins::SESSION, {}, $topic, $web);
 }
 
 # Handler used by editors that require pre-prepared HTML embedded in the
@@ -277,7 +277,7 @@ sub _WYSIWYG_TEXT {
 
     # Have to re-read the topic because content has already been munged
     # by other plugins, or by the extraction of verbatim blocks.
-    my( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
+    my( $meta, $text ) = Foswiki::Func::readTopic( $web, $topic );
 
     $text = TranslateTML2HTML( $text, $web, $topic );
 
@@ -340,11 +340,11 @@ sub getViewUrl {
     my( $web, $topic ) = @_;
 
     # the Cairo documentation says getViewUrl defaults the web. It doesn't.
-    unless( defined $TWiki::Plugins::SESSION ) {
-        $web ||= $TWiki::webName;
+    unless( defined $Foswiki::Plugins::SESSION ) {
+        $web ||= $Foswiki::webName;
     }
 
-    return TWiki::Func::getViewUrl( $web, $topic );
+    return Foswiki::Func::getViewUrl( $web, $topic );
 }
 
 # The subset of vars for which bidirection transformation is supported
@@ -373,7 +373,7 @@ sub _populateVars {
     local $recursionBlock = 1; # block calls to beforeCommonTagshandler
 
     my @exp = split(
-        /\0/, TWiki::Func::expandCommonVariables(
+        /\0/, Foswiki::Func::expandCommonVariables(
             join("\0", @VARS), $opts->{topic}, $opts->{web} ));
 
     for my $i (0..$#VARS) {
@@ -424,7 +424,7 @@ sub postConvertURL {
     if ($url =~ m#^%SCRIPTURL(?:PATH)?(?:{"view"}%|%/+view[^/]*)/+([/\w.]+)$#
           && !$parameters) {
         my $orig = $1;
-        my( $web, $topic ) = TWiki::Func::normalizeWebTopicName(
+        my( $web, $topic ) = Foswiki::Func::normalizeWebTopicName(
             $opts->{web}, $orig);
 
         if( $web && $web ne $opts->{web} ) {
@@ -450,11 +450,11 @@ sub _convertImage {
     unless( $imgMap ) {
         $imgMap = {};
         my $imgs =
-          TWiki::Func::getPreferencesValue( 'WYSIWYGPLUGIN_ICONS' );
+          Foswiki::Func::getPreferencesValue( 'WYSIWYGPLUGIN_ICONS' );
         if( $imgs ) {
             while( $imgs =~ s/src="(.*?)" alt="(.*?)"// ) {
                 my( $src, $alt ) = ( $1, $2 );
-                $src = TWiki::Func::expandCommonVariables(
+                $src = Foswiki::Func::expandCommonVariables(
                     $src, $opts->{topic}, $opts->{web} );
                 $alt .= '%' if $alt =~ /^%/;
                 $imgMap->{$src} = $alt;
@@ -497,12 +497,12 @@ sub notWysiwygEditable {
 
     my $exclusions = $_[1];
     unless( defined( $exclusions )) {
-        $exclusions = TWiki::Func::getPreferencesValue('WYSIWYG_EXCLUDE')
+        $exclusions = Foswiki::Func::getPreferencesValue('WYSIWYG_EXCLUDE')
           || '';
     }
     return 0 unless $exclusions;
 
-    my $calls_ok = TWiki::Func::getPreferencesValue(
+    my $calls_ok = Foswiki::Func::getPreferencesValue(
         'WYSIWYG_EDITABLE_CALLS' ) || '---';
     $calls_ok =~ s/\s//g;
 
@@ -537,8 +537,8 @@ sub TranslateTML2HTML {
 
     # Translate the topic text to pure HTML.
     unless( $tml2html ) {
-        require TWiki::Plugins::WysiwygPlugin::TML2HTML;
-        $tml2html = new TWiki::Plugins::WysiwygPlugin::TML2HTML();
+        require Foswiki::Plugins::WysiwygPlugin::TML2HTML;
+        $tml2html = new Foswiki::Plugins::WysiwygPlugin::TML2HTML();
     }
     return $tml2html->convert(
         $_[0],
@@ -561,7 +561,7 @@ sub protectedByAttr {
     unless (scalar(@protectedByAttr)) {
         # See the WysiwygPluginSettings for information on stickybits
         my $protection =
-          TWiki::Func::getPreferencesValue('WYSIWYGPLUGIN_STICKYBITS') ||
+          Foswiki::Func::getPreferencesValue('WYSIWYGPLUGIN_STICKYBITS') ||
               <<'DEFAULT';
 .*=id,lang,title,dir,on.*;
 a=accesskey,coords,shape,target;
@@ -622,9 +622,9 @@ sub RESTParameter2SiteCharSet {
 
     WC::mapUnicode2HighBit($text);
 
-    if ($TWiki::cfg{Site}{CharSet}) {
+    if ($Foswiki::cfg{Site}{CharSet}) {
         $text = Encode::encode(
-            $TWiki::cfg{Site}{CharSet}, $text, Encode::FB_PERLQQ);
+            $Foswiki::cfg{Site}{CharSet}, $text, Encode::FB_PERLQQ);
     }
 
     return $text;
@@ -638,18 +638,18 @@ sub RESTParameter2SiteCharSet {
 sub returnRESTResult {
     my ($response, $status, $text) = @_;
 
-    if ($TWiki::cfg{Site}{CharSet}) {
+    if ($Foswiki::cfg{Site}{CharSet}) {
         $text = Encode::decode(
-            $TWiki::cfg{Site}{CharSet}, $text, Encode::FB_PERLQQ);
+            $Foswiki::cfg{Site}{CharSet}, $text, Encode::FB_PERLQQ);
     }
 
     WC::mapHighBit2Unicode($text);
 
     $text = Encode::encode_utf8($text);
 
-    # TWiki5 introduces the TWiki::Response object, which handles all
+    # TWiki5 introduces the Foswiki::Response object, which handles all
     # responses.
-    if (UNIVERSAL::isa( $response, 'TWiki::Response')) {
+    if (UNIVERSAL::isa( $response, 'Foswiki::Response')) {
         $response->header(
             -status => $status,
             -type => 'text/plain',
@@ -659,7 +659,7 @@ sub returnRESTResult {
         # Turn off AUTOFLUSH
         # See http://perl.apache.org/docs/2.0/user/coding/coding.html
         local $| = 0;
-        my $query = TWiki::Func::getCgiQuery();
+        my $query = Foswiki::Func::getCgiQuery();
         if (defined($query)) {
             my $len;
             { use bytes; $len = length($text); };
@@ -690,7 +690,7 @@ sub returnRESTResult {
 #
 sub _restTML2HTML {
     my ($session, $plugin, $verb, $response) = @_;
-    my $tml = TWiki::Func::getCgiQuery()->param('text');
+    my $tml = Foswiki::Func::getCgiQuery()->param('text');
 
     $tml = RESTParameter2SiteCharSet($tml);
 
@@ -717,11 +717,11 @@ sub _restTML2HTML {
 sub _restHTML2TML {
     my ($session, $plugin, $verb, $response) = @_;
     unless( $html2tml ) {
-        require TWiki::Plugins::WysiwygPlugin::HTML2TML;
+        require Foswiki::Plugins::WysiwygPlugin::HTML2TML;
 
-        $html2tml = new TWiki::Plugins::WysiwygPlugin::HTML2TML();
+        $html2tml = new Foswiki::Plugins::WysiwygPlugin::HTML2TML();
     }
-    my $html = TWiki::Func::getCgiQuery()->param('text');
+    my $html = Foswiki::Func::getCgiQuery()->param('text');
 
     $html = RESTParameter2SiteCharSet($html);
 
@@ -742,7 +742,7 @@ sub _restHTML2TML {
 
 sub _restUpload {
     my ($session, $plugin, $verb, $response) = @_;
-    my $query = TWiki::Func::getCgiQuery();
+    my $query = Foswiki::Func::getCgiQuery();
     my $topic = $query->param('topic');
     $topic =~ /^(.*)\.([^.]*)$/;
     my $web = $1;
@@ -764,8 +764,8 @@ sub _restUpload {
     $fileName =~ s/\s*$//o;
     $filePath =~ s/\s*$//o;
 
-    unless (TWiki::Func::checkAccessPermission(
-        'CHANGE', TWiki::Func::getWikiName(), undef, $topic, $web)) {
+    unless (Foswiki::Func::checkAccessPermission(
+        'CHANGE', Foswiki::Func::getWikiName(), undef, $topic, $web)) {
         returnRESTResult($response, 401, "Access denied");
         return undef; # to prevent further processing
     }
@@ -778,7 +778,7 @@ sub _restUpload {
     unless($doPropsOnly) {
         # SMELL: call to unpublished function
         ($fileName, $origName) =
-          TWiki::Sandbox::sanitizeAttachmentName($fileName);
+          Foswiki::Sandbox::sanitizeAttachmentName($fileName);
 
         # check if upload has non zero size
         if($stream) {
@@ -792,7 +792,7 @@ sub _restUpload {
             return undef; # to prevent further processing
         }
 
-        my $maxSize = TWiki::Func::getPreferencesValue(
+        my $maxSize = Foswiki::Func::getPreferencesValue(
             'ATTACHFILESIZELIMIT');
         $maxSize = 0 unless ($maxSize =~ /([0-9]+)/o);
 
@@ -804,10 +804,10 @@ sub _restUpload {
 
     # SMELL: use of undocumented CGI::tmpFileName
     my $tfp = $query->tmpFileName($query->param('filepath'));
-    my $error = TWiki::Func::saveAttachment(
+    my $error = Foswiki::Func::saveAttachment(
         $web, $topic, $fileName,
         {
-            dontlog => !$TWiki::cfg{Log}{upload},
+            dontlog => !$Foswiki::cfg{Log}{upload},
             comment => $fileComment,
             hide => $hideFile,
             createlink => $createLink,
@@ -844,11 +844,11 @@ sub _unquote {
 # Get, and return, a list of attachments using JSON
 sub _restAttachments {
     my ($session, $plugin, $verb, $response) = @_;
-    my ($web, $topic) = TWiki::Func::normalizeWebTopicName(
-        undef, TWiki::Func::getCgiQuery()->param('topic'));
-    my ($meta, $text) = TWiki::Func::readTopic($web, $topic);
-    unless (TWiki::Func::checkAccessPermission(
-        'VIEW', TWiki::Func::getWikiName(), $text, $topic, $web, $meta)) {
+    my ($web, $topic) = Foswiki::Func::normalizeWebTopicName(
+        undef, Foswiki::Func::getCgiQuery()->param('topic'));
+    my ($meta, $text) = Foswiki::Func::readTopic($web, $topic);
+    unless (Foswiki::Func::checkAccessPermission(
+        'VIEW', Foswiki::Func::getWikiName(), $text, $topic, $web, $meta)) {
         returnRESTResult($response, 401, "Access denied");
         return undef; # to prevent further processing
     }

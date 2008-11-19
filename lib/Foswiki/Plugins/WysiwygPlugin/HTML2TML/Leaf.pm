@@ -1,5 +1,5 @@
 # Copyright (C) 2005 ILOG http://www.ilog.fr
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
+# and Foswiki Contributors. All Rights Reserved. Foswiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
 #
@@ -17,18 +17,18 @@
 
 =pod
 
----+ package TWiki::Plugins::WysiwygPlugin::TML2HTML::Leaf
+---+ package Foswiki::Plugins::WysiwygPlugin::TML2HTML::Leaf
 
 Object for a leaf node in an HTML parse tree
 
 A leaf node is text in the document.
 
-See also TWiki::Plugins::WysiwygPlugin::TML2HTML::Node
+See also Foswiki::Plugins::WysiwygPlugin::TML2HTML::Node
 
 =cut
 
-package TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf;
-use base 'TWiki::Plugins::WysiwygPlugin::HTML2TML::Base';
+package Foswiki::Plugins::WysiwygPlugin::HTML2TML::Leaf;
+use base 'Foswiki::Plugins::WysiwygPlugin::HTML2TML::Base';
 
 use strict;
 
@@ -62,8 +62,8 @@ sub generate {
     }
     if( $options & $WC::NOP_ALL ) {
         # escape all embedded wikiwords
-        $t =~ s/$WC::STARTWW($TWiki::regex{wikiWordRegex})/<nop>$1/go;
-        $t =~ s/$WC::STARTWW($TWiki::regex{abbrevRegex})/<nop>$1/go;
+        $t =~ s/$WC::STARTWW($Foswiki::regex{wikiWordRegex})/<nop>$1/go;
+        $t =~ s/$WC::STARTWW($Foswiki::regex{abbrevRegex})/<nop>$1/go;
         $t =~ s/\[/<nop>[/g;
     }
     unless ($options & $WC::KEEP_ENTITIES) {

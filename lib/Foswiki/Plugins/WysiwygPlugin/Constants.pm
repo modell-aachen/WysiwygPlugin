@@ -1,4 +1,4 @@
-#package TWiki::Plugins::WysiwygPlugin::Constants;
+#package Foswiki::Plugins::WysiwygPlugin::Constants;
 # Use s simpler-named namespace for constants to improve code readability
 package WC;
 
@@ -226,7 +226,7 @@ our $encoding;
 sub encoding {
     unless ($encoding) {
         $encoding = Encode::resolve_alias(
-            $TWiki::cfg{Site}{CharSet} || 'iso-8859-1');
+            $Foswiki::cfg{Site}{CharSet} || 'iso-8859-1');
     }
     return $encoding;
 }
