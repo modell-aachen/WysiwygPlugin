@@ -8,12 +8,12 @@ BEGIN {
   }
 }
 
-use TWiki::Contrib::Build;
+use Foswiki::Contrib::Build;
 
 # Declare our build package
 { package WysiwygPluginBuild;
 
-  @WysiwygPluginBuild::ISA = ( "TWiki::Contrib::Build" );
+  @WysiwygPluginBuild::ISA = ( "Foswiki::Contrib::Build" );
 
   sub new {
     my $class = shift;

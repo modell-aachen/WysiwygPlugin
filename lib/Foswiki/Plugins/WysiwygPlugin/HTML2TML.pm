@@ -1,5 +1,5 @@
 # Copyright (C) 2005 ILOG http://www.ilog.fr
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
+# and Foswiki Contributors. All Rights Reserved. Foswiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
 #
@@ -17,7 +17,7 @@
 
 =pod
 
----+ package TWiki::Plugins::WysiwygPlugin::HTML2TML;
+---+ package Foswiki::Plugins::WysiwygPlugin::HTML2TML;
 
 Convertor for translating HTML into TML (TWiki Meta Language)
 
@@ -37,7 +37,7 @@ the final TML.
 
 =cut
 
-package TWiki::Plugins::WysiwygPlugin::HTML2TML;
+package Foswiki::Plugins::WysiwygPlugin::HTML2TML;
 use base 'HTML::Parser';
 
 use strict;
@@ -46,8 +46,8 @@ require Encode;
 require HTML::Parser;
 require HTML::Entities;
 
-require TWiki::Plugins::WysiwygPlugin::HTML2TML::Node;
-require TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf;
+require Foswiki::Plugins::WysiwygPlugin::HTML2TML::Node;
+require Foswiki::Plugins::WysiwygPlugin::HTML2TML::Leaf;
 
 =pod
 
@@ -86,7 +86,7 @@ sub _resetStack {
     my $this = shift;
 
     $this->{stackTop} =
-      new TWiki::Plugins::WysiwygPlugin::HTML2TML::Node( $this->{opts}, '' );
+      new Foswiki::Plugins::WysiwygPlugin::HTML2TML::Node( $this->{opts}, '' );
     $this->{stack} = ();
 }
 
@@ -165,7 +165,7 @@ sub _openTag {
 
     push( @{$this->{stack}}, $this->{stackTop} ) if $this->{stackTop};
     $this->{stackTop} =
-      new TWiki::Plugins::WysiwygPlugin::HTML2TML::Node(
+      new Foswiki::Plugins::WysiwygPlugin::HTML2TML::Node(
           $this->{opts}, $tag, $attrs );
 
     if ($autoClose{$tag}) {
@@ -194,13 +194,13 @@ sub _closeTag {
 
 sub _text {
     my( $this, $text ) = @_;
-    my $l = new TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf( $text );
+    my $l = new Foswiki::Plugins::WysiwygPlugin::HTML2TML::Leaf( $text );
     $this->{stackTop}->addChild( $l );
 }
 
 sub _comment {
     my( $this, $text ) = @_;
-    my $l = new TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf( $text );
+    my $l = new Foswiki::Plugins::WysiwygPlugin::HTML2TML::Leaf( $text );
     $this->{stackTop}->addChild( $l );
 }
 

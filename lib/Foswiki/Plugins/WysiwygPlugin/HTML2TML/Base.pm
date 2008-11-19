@@ -1,5 +1,5 @@
 # Abstract base class of node types
-package TWiki::Plugins::WysiwygPlugin::HTML2TML::Base;
+package Foswiki::Plugins::WysiwygPlugin::HTML2TML::Base;
 
 use Assert;
 
@@ -109,8 +109,8 @@ sub _combineLeaves {
     my $kid = $this->{head};
     return unless $kid;
     while (my $next = $kid->{next}) {
-        if ($kid->isa('TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf') &&
-              $next->isa('TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf')) {
+        if ($kid->isa('Foswiki::Plugins::WysiwygPlugin::HTML2TML::Leaf') &&
+              $next->isa('Foswiki::Plugins::WysiwygPlugin::HTML2TML::Leaf')) {
             $kid->{text} .= $next->{text};
             $next->_remove();
         } else {
@@ -124,7 +124,7 @@ sub _combineLeaves {
 sub isInline {
     # This impl is actually for Nodes; Leaf overrides it
     my $this = shift;
-    return 0 if $TWiki::Plugins::WysiwygPlugin::Constants::ALWAYS_BLOCK{uc($this->{tag})};
+    return 0 if $Foswiki::Plugins::WysiwygPlugin::Constants::ALWAYS_BLOCK{uc($this->{tag})};
     my $kid = $this->{head};
     while ($kid) {
         return 0 unless $kid->isInline();
@@ -136,7 +136,7 @@ sub isInline {
 sub isLeftInline {
     # This impl is actually for Nodes; Leaf overrides it
     my $this = shift;
-    return 0 if $TWiki::Plugins::WysiwygPlugin::Constants::ALWAYS_BLOCK{uc($this->{tag})};
+    return 0 if $Foswiki::Plugins::WysiwygPlugin::Constants::ALWAYS_BLOCK{uc($this->{tag})};
     return 1 unless ($this->{head});
     return 0 unless $this->{head}->isInline();
     return 1;
@@ -144,7 +144,7 @@ sub isLeftInline {
 
 sub isRightInline {
     my $this = shift;
-    return 0 if $TWiki::Plugins::WysiwygPlugin::Constants::ALWAYS_BLOCK{uc($this->{tag})};
+    return 0 if $Foswiki::Plugins::WysiwygPlugin::Constants::ALWAYS_BLOCK{uc($this->{tag})};
     return 1 unless $this->{tail};
     return 0 unless $this->{tail}->isInline();
     return 1;

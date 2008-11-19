@@ -1,5 +1,5 @@
 # Copyright (C) 2005 ILOG http://www.ilog.fr
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
+# and Foswiki Contributors. All Rights Reserved. Foswiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
 #
@@ -17,7 +17,7 @@
 
 =pod
 
----+ package TWiki::Plugins::WysiwygPlugin::TML2HTML
+---+ package Foswiki::Plugins::WysiwygPlugin::TML2HTML
 
 Convertor class for translating TML (TWiki Meta Language) into
 HTML
@@ -32,13 +32,13 @@ TML syntax is not supported.
 
 =cut
 
-package TWiki::Plugins::WysiwygPlugin::TML2HTML;
+package Foswiki::Plugins::WysiwygPlugin::TML2HTML;
 
 use strict;
 use CGI qw( -any );
 
-require TWiki;
-require TWiki::Plugins::WysiwygPlugin::Constants;
+require Foswiki;
+require Foswiki::Plugins::WysiwygPlugin::Constants;
 
 my $TT0 = chr(0);
 my $TT1 = chr(1);
@@ -280,14 +280,14 @@ sub _getRenderedVersion {
     $text =~ s/}$TT0/>/go;
 
     # standard URI
-    $text =~ s/((^|(?<=[-*\s(]))$TWiki::regex{linkProtocolPattern}:[^\s<>"]+[^\s*.,!?;:)<])/$this->_liftOut($1, 'LINK')/geo;
+    $text =~ s/((^|(?<=[-*\s(]))$Foswiki::regex{linkProtocolPattern}:[^\s<>"]+[^\s*.,!?;:)<])/$this->_liftOut($1, 'LINK')/geo;
 
     # other entities
-    $text =~ s/&([$TWiki::regex{mixedAlphaNum}]+;)/$TT0$1/g;      # "&abc;"
+    $text =~ s/&([$Foswiki::regex{mixedAlphaNum}]+;)/$TT0$1/g;      # "&abc;"
     $text =~ s/&(#[0-9]+;)/$TT0$1/g;  # "&#123;"
     #$text =~ s/&/&amp;/g;             # escape standalone "&"
     $text =~ s/$TT0(#[0-9]+;)/&$1/go;
-    $text =~ s/$TT0([$TWiki::regex{mixedAlphaNum}]+;)/&$1/go;
+    $text =~ s/$TT0([$Foswiki::regex{mixedAlphaNum}]+;)/&$1/go;
 
     # Horizontal rule
     my $hr = CGI::hr({class => 'TMLhr'});
@@ -322,7 +322,7 @@ sub _getRenderedVersion {
             $inTable = 0;
         }
 
-        if ($line =~ /$TWiki::regex{headerPatternDa}/o) {
+        if ($line =~ /$Foswiki::regex{headerPatternDa}/o) {
             # Running head
             $this->_addListItem( \@result, '', '', '' ) if $inList;
             $inList = 0;
@@ -330,7 +330,7 @@ sub _getRenderedVersion {
             $inParagraph = 0;
             my( $indicator, $heading ) = ( $1, $2 );
             my $class = 'TML';
-            if( $heading =~ s/$TWiki::regex{headerPatternNoTOC}//o ) {
+            if( $heading =~ s/$Foswiki::regex{headerPatternNoTOC}//o ) {
                 $class .= ' notoc';
             }
             if( $indicator =~ /#/ ) {
@@ -432,7 +432,7 @@ sub _getRenderedVersion {
     # [[][]]
     $text =~ s/(\[\[[^\]]*\](\[[^\]]*\])?\])/$this->_liftOut($1, 'LINK')/ge;
 
-    $text =~ s/$WC::STARTWW(($TWiki::regex{webNameRegex}\.)?$TWiki::regex{wikiWordRegex}($TWiki::regex{anchorRegex})?)/$this->_liftOut($1, 'LINK')/geom;
+    $text =~ s/$WC::STARTWW(($Foswiki::regex{webNameRegex}\.)?$Foswiki::regex{wikiWordRegex}($Foswiki::regex{anchorRegex})?)/$this->_liftOut($1, 'LINK')/geom;
 
     while (my ($placeholder, $val) = each %{$this->{removed}} ) {
         if( $placeholder =~ /^verbatim/i ) {
@@ -491,7 +491,7 @@ sub _takeOutIMGTag {
 sub _takeOutSets {
     my $this = $_[0];
     my $setRegex =
-      qr/^((?:\t|   )+\*\s+(?:Set|Local)\s+(?:$TWiki::regex{tagNameRegex})\s*=)(.*)$/o;
+      qr/^((?:\t|   )+\*\s+(?:Set|Local)\s+(?:$Foswiki::regex{tagNameRegex})\s*=)(.*)$/o;
 
     my $lead;
     my $value;
@@ -507,7 +507,7 @@ sub _takeOutSets {
         }
 
         if( defined $lead ) {
-            if( /^(   |\t)+ *[^\s]/ && !/$TWiki::regex{bulletRegex}/o ) {
+            if( /^(   |\t)+ *[^\s]/ && !/$Foswiki::regex{bulletRegex}/o ) {
                 # follow up line, extending value
                 $value .= "\n".$_;
                 next;
@@ -611,7 +611,7 @@ sub _putBackBlocks {
 sub _parseParams {
     my $p = shift;
     my $params = {};
-    while( $p =~ s/^\s*([$TWiki::regex{mixedAlphaNum}]+)=(".*?"|'.*?')// ) {
+    while( $p =~ s/^\s*([$Foswiki::regex{mixedAlphaNum}]+)=(".*?"|'.*?')// ) {
         my $name = $1;
         my $val = $2;
         $val =~ s/['"](.*)['"]/$1/;
