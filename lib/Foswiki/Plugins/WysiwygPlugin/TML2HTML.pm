@@ -592,12 +592,6 @@ s/((^|(?<=[-*\s(]))$Foswiki::regex{linkProtocolPattern}:[^\s<>"]+[^\s*.,!?;:)<])
                 push( @result, $line );
                 next;
             }
-            elsif ( !$line || $line =~ m/^\s*$/ ) {
-                push( @result, '</p>' ) if ($inParagraph);
-                push( @result, '<p></p>' );
-                $inParagraph = 0;
-                next;
-            }
         }
 
         if ( $line =~ m/<table/i ) {
@@ -658,21 +652,13 @@ s/((^|(?<=[-*\s(]))$Foswiki::regex{linkProtocolPattern}:[^\s<>"]+[^\s*.,!?;:)<])
             $class = " class='$class'" if $class;
 
             push( @result, '</p>' ) if $inParagraph;
-            $inParagraph = 0;
 
-            if ($inHTMLTable) {
-                $line = '<p' . $class . '></p>';
-                $this->_addListItem( \@result, '', '', '', '' ) if $inList;
-                $inList = 0;
-            }
-            else {
-                $line = '<p' . $class . '>';
+            $line = '<p' . $class . '>';
 
-                $this->_addListItem( \@result, '', '', '', '' ) if $inList;
-                $inList = 0;
+            $this->_addListItem( \@result, '', '', '', '' ) if $inList;
+            $inList = 0;
 
-                $inParagraph = 1;
-            }
+            $inParagraph = 1;
         }
         elsif ( $line =~
             s/^((\t|   )+)\$\s(([^:]+|:[^\s]+)+?):\s/<dt> $3 <\/dt><dd> /o )
@@ -791,18 +777,24 @@ s/((^|(?<=[-*\s(]))$Foswiki::regex{linkProtocolPattern}:[^\s<>"]+[^\s*.,!?;:)<])
                 if ( $line =~ s/^(\s+)// ) {
                     $whitespace .= $1;
                 }
-                $line = $this->_hideWhitespace($whitespace) . $line
-                  if length($whitespace);
-            }
-            unless ( $inParagraph or $inDiv ) {
-                unless ($inHTMLTable) {
-
-                    #print STDERR "pushed <p>\n";
-                    push( @result, '<p>' );
-                    $inParagraph = 1;
+#                $line = $this->_hideWhitespace($whitespace) . $line
+#                  if length($whitespace);
+            } else {
+                if ( $inHTMLTable && $line =~ /^<\/t[dh]/ && $result[-1] =~ /^<p(?: class='[^']+')?>$/ ) {
+                    pop @result;
+                    $inParagraph = 0;
                 }
             }
-            $line =~ s/(\s\s+)/$this->_hideWhitespace($1)/ge;
+            my $skipNewPara = 0;
+            if ( $inParagraph and $inHTMLTable and $line =~ s!</(t[dh])>!</p></$1>! ) {
+                $inParagraph = 0;
+                $skipNewPara = 1;
+            }
+            unless ( $skipNewPara or $inParagraph or $inDiv or $line =~ /^<(?:table|\/t[dh]>)/ ) {
+                push( @result, '<p>' );
+                $inParagraph = 1;
+            }
+#            $line =~ s/(\s\s+)/$this->_hideWhitespace($1)/ge;
             if ( defined $result[-1] ) {
                 $result[-1] .= $line;
                 $line = '';

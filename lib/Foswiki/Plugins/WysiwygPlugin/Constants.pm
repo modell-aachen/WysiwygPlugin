@@ -17,8 +17,8 @@ our $ALWAYS_BLOCK_S = join( '|', keys %ALWAYS_BLOCK );
 
 # STARTWW should match Foswiki::Render, execpt need to include protected whitespace spans.
 our $STARTWW =
-  qr/^|(?<=[ \t\n\(])|(?<=<p>)|(?<=nbsp;<\/span>)|(?<=160;<\/span>)/om;
-our $ENDWW    = qr/$|(?=[ \t\n\,\.\;\:\!\?\)])|(?=<\/p>)|(?=<span\b[^>]*> )/om;
+  qr/^|(?<=[ \t\n\(])|(?<=<p>)|(?<=<p class='WYSIWYG_NBNL'>)|(?<=nbsp;<\/span>)|(?<=160;<\/span>)/om;
+our $ENDWW    = qr/$|(?=[ \t\n\,\.\;\:\!\?\)])|(?=<\/p>)|(?=<span\b[^>]*> )|(?=<\/t[dh]>)/om;
 our $PROTOCOL = qr/^(file|ftp|gopher|https?|irc|news|nntp|telnet|mailto):/;
 
 # Colours with colour settings in DefaultPreferences.
