@@ -584,24 +584,28 @@ s/((^|(?<=[-*\s(]))$Foswiki::regex{linkProtocolPattern}:[^\s<>"]+[^\s*.,!?;:)<])
     foreach my $line ( split( /\n/, $text ) ) {
         my $tableEnded = 0;
 
-        # Native HTML tables should pass through to editor unmodified as possible
-        # However need to preserve blank lines.   On save, table will be converted
-        # to TML if compatible.
-        if ( $inHTMLTable ) {
-            if ($line =~ m/<\/table>/i ) {
-                push( @result, $line );
+        if ($inHTMLTable) {
+            if ( $line =~ m/<\/table>/i ) {
                 $inHTMLTable = 0;
+                $this->_addListItem( \@result, '', '', '' ) if $inList;
+                $inList = 0;
+                push( @result, $line );
                 next;
             }
-            $line = '<p></p>' if ( !$line || $line =~ m/^\s*$/);
-            push( @result, $line );
-            next;
+            elsif ( !$line || $line =~ m/^\s*$/ ) {
+                push( @result, '</p>' ) if ($inParagraph);
+                push( @result, '<p></p>' );
+                $inParagraph = 0;
+                next;
+            }
         }
 
         if ( $line =~ m/<table/i ) {
             $inHTMLTable = 1;
-            push( @result , $line );
-            next;
+            if ($inParagraph) {
+                push( @result, '</p>' );
+                $inParagraph = 0;
+            }
         }
 
         # Table: | cell | cell |
@@ -656,13 +660,19 @@ s/((^|(?<=[-*\s(]))$Foswiki::regex{linkProtocolPattern}:[^\s<>"]+[^\s*.,!?;:)<])
             push( @result, '</p>' ) if $inParagraph;
             $inParagraph = 0;
 
-            $line = '<p' . $class . '>';
+            if ($inHTMLTable) {
+                $line = '<p' . $class . '></p>';
+                $this->_addListItem( \@result, '', '', '', '' ) if $inList;
+                $inList = 0;
+            }
+            else {
+                $line = '<p' . $class . '>';
 
-            $this->_addListItem( \@result, '', '', '', '' ) if $inList;
-            $inList = 0;
+                $this->_addListItem( \@result, '', '', '', '' ) if $inList;
+                $inList = 0;
 
-            $inParagraph = 1;
-
+                $inParagraph = 1;
+            }
         }
         elsif ( $line =~
             s/^((\t|   )+)\$\s(([^:]+|:[^\s]+)+?):\s/<dt> $3 <\/dt><dd> /o )
@@ -762,7 +772,7 @@ s/((^|(?<=[-*\s(]))$Foswiki::regex{linkProtocolPattern}:[^\s<>"]+[^\s*.,!?;:)<])
             # Other line
             $this->_addListItem( \@result, '', '', '' ) if $inList;
             $inList = 0;
-            if (    $inParagraph
+            if (    ( $inParagraph or $inHTMLTable )
                 and @result
                 and $result[-1] !~ /<p(?: class='[^']+')?>$/ )
             {
@@ -785,12 +795,18 @@ s/((^|(?<=[-*\s(]))$Foswiki::regex{linkProtocolPattern}:[^\s<>"]+[^\s*.,!?;:)<])
                   if length($whitespace);
             }
             unless ( $inParagraph or $inDiv ) {
-                push( @result, '<p>' );
-                $inParagraph = 1;
+                unless ($inHTMLTable) {
+
+                    #print STDERR "pushed <p>\n";
+                    push( @result, '<p>' );
+                    $inParagraph = 1;
+                }
             }
             $line =~ s/(\s\s+)/$this->_hideWhitespace($1)/ge;
-            $result[-1] .= $line;
-            $line = '';
+            if ( defined $result[-1] ) {
+                $result[-1] .= $line;
+                $line = '';
+            }
         }
 
         push( @result, $line ) if length($line) > 0;
@@ -855,6 +871,7 @@ s/$startww(($Foswiki::regex{webNameRegex}\.)?$Foswiki::regex{wikiWordRegex}($Fos
         $text = '<p class="foswikiDeleteMe">&nbsp;</p>' . $text;
     }
 
+    #print STDERR "DEBUG\n$text\n";
     return $text;
 }
 
