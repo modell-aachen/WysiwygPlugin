@@ -880,6 +880,10 @@ sub _liftOutSquab {
     {
         ( $url, $text ) = split( / /, $url, 2 );
     }
+    $url =~ s/&/&amp;/g;
+    $url =~ s/</&lt;/g;
+    $url =~ s/>/&gt;/g;
+    $url =~ s/"/&quot;/g;
 
     # Treat as old style link if embedded spaces in the url
     return $this->_liftOut( '[[' . $url . ']]', 'LINK' )
