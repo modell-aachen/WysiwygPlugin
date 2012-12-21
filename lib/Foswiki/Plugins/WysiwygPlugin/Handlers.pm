@@ -911,14 +911,13 @@ sub _restUpload {
     # Otherwise allow the rest dispatcher to write a 200
     #TODO: Alex, hier muss was getan werden!
     my $answer = '<script type="text/javascript">window.parent.CKEDITOR.tools.callFunction(' . $funcNum . ', "' . $url . '" , "");</script>';
-    # Otherwise allow the rest dispatcher to write a 200
-    # returnRESTResult( $response, 200, $answer );
-    return $answer;    # to prevent further processing
-    
-    
-    
-    return "$origName attached to $web.$topic"
-      . ( $origName ne $fileName ? " as $fileName" : '' );
+    $response->header(
+        -status => 200,
+        -type => 'text/html',
+        -charset => 'UTF-8',
+    );
+    $response->print($answer);
+    return '';
 }
 
 sub _unquote {
