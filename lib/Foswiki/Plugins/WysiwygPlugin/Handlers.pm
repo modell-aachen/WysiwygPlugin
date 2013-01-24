@@ -910,7 +910,11 @@ sub _restUpload {
 
     # Otherwise allow the rest dispatcher to write a 200
     #TODO: Alex, hier muss was getan werden!
-    my $answer = '<script type="text/javascript">window.parent.CKEDITOR.tools.callFunction(' . $funcNum . ', "' . $url . '" , "");</script>';
+    my $code = 'window.parent.CKEDITOR.tools.callFunction(' . $funcNum . ', "' . $url . '" , "");';
+    if ( Foswiki::Func::getContext()->{SafeWikiSignable} ) {
+        Foswiki::Plugins::SafeWikiPlugin::Signatures::permitInlineCode($code);
+    }
+    my $answer = "<script type=\"text/javascript\">$code</script>";
     $response->header(
         -status => 200,
         -type => 'text/html',
