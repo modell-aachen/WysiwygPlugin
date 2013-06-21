@@ -8,6 +8,7 @@ lib/Foswiki/Plugins/WysiwygPlugin/HTML2TML/Node.pm 0444 Perl module
 lib/Foswiki/Plugins/WysiwygPlugin/HTML2TML.pm 0444 Perl module
 lib/Foswiki/Plugins/WysiwygPlugin.pm 0444 Perl module
 lib/Foswiki/Plugins/WysiwygPlugin/TML2HTML.pm 0444 Perl module
+locale/WysiwygPlugin/de.po 0444 German translation
 data/System/WysiwygPlugin.txt 0644 Documentation and settings
 data/System/WysiwygPluginSettings.txt 0644 Documentation and settings
 data/System/WysiwygPluginTopicLister.txt 0644 Special AJAX topic

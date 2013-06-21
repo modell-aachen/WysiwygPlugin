@@ -870,9 +870,33 @@ sub _restUpload {
     catch Error::Simple with {
         $error = shift->{-text};
     }
+    catch Error with {
+        my $e = shift;
+        if (ref($e->{params}) eq 'ARRAY') {
+            $error = $e->{params}[0];
+        } else {
+            $error = $e;
+        }
+    }
     finally {
         close($stream) if $stream;
     };
+
+    if (defined $error && $error =~ /You cannot upload this attachment/) {
+        my $code = 'window.parent.CKEDITOR.tools.callFunction('.$funcNum.', "", "'.
+            $session->i18n->maketext("The type of the file you uploaded is not permitted.")
+            .'");';
+        if (Foswiki::Func::getContext()->{SafeWikiSignable}) {
+            Foswiki::Plugins::SafeWikiPlugin::Signatures::permitInlineCode($code);
+        }
+        $response->header(
+            -status => 200,
+            -type => 'text/html',
+            -charset => 'UTF-8',
+        );
+        $response->print("<script type=\"text/javascript\">$code</script>");
+        return '';
+    }
 
     if ($error) {
         returnRESTResult( $response, 500, $error );
