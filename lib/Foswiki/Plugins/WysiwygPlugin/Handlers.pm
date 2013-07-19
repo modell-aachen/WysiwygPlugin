@@ -832,7 +832,18 @@ sub _restUpload {
         }
 
         unless ( $fileSize && $fileName ) {
-            returnRESTResult( $response, 500, "Zero-sized file upload" );
+            my $code = "window.parent.CKEDITOR.tools.callFunction($funcNum, '', \"".
+                $session->i18n->maketext("Empty files cannot be uploaded.") .
+                '");';
+            if (Foswiki::Func::getContext()->{SafeWikiSignable}) {
+                Foswiki::Plugins::SafeWikiPlugin::Signatures::permitInlineCode($code);
+            }
+            $response->header(
+                -status => 200,
+                -type => 'text/html',
+                -charset => 'UTF-8',
+            );
+            $response->print("<script type=\"text/javascript\">$code</script>");
             return;    # to prevent further processing
         }
 
