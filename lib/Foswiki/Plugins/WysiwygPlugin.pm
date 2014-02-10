@@ -29,7 +29,7 @@ use Assert;
 
 our $SHORTDESCRIPTION  = 'Translator framework for WYSIWYG editors';
 our $NO_PREFS_IN_TOPIC = 1;
-our $VERSION           = '$Rev$';
+our $VERSION           = '1.1.15';
 
 our $RELEASE = "1.1.15";
 
