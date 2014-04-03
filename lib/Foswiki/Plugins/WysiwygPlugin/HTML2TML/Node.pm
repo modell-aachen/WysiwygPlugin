@@ -1668,6 +1668,11 @@ sub _handleP {
     if ( $this->hasClass('WYSIWYG_STICKY') ) {
         return $this->_verbatim( 'sticky', $options );
     }
+    # meyer: do not flatten paragraphs when there's a style attribute present
+    # (fix text align cke4)
+    if ( $this->{attrs}->{style} ) {
+        return $this->_verbatim( 'p', $options );
+    }
     my ( $f, $kids ) = $this->_flatten($options);
     return ( $f, '<p>' . $kids . '</p>' ) if ( $options & $WC::NO_BLOCK_TML );
     my $prevNode = $this->{prev};
