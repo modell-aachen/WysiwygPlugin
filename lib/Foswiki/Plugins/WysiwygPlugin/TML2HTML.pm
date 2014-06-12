@@ -134,7 +134,7 @@ WARNING
 
         my $tagBlocksToProtect =
           Foswiki::Func::getPreferencesValue('WYSIWYGPLUGIN_PROTECT_TAG_BLOCKS')
-          || 'script,style';
+          || 'script,style,map';
         foreach my $tag ( split /[,\s]+/, $tagBlocksToProtect ) {
             next unless $tag =~ /^\w+$/;
             $this->{protectExistingTagBlocks}->{$tag} = 1;
