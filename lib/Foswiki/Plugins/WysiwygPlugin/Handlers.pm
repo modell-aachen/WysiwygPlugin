@@ -219,13 +219,21 @@ sub beforeCommonTagsHandler {
 # Handler used by editors that require pre-prepared HTML embedded in the
 # edit template.
 sub _WYSIWYG_TEXT {
-    my ( $session, $params, $topic, $web ) = @_;
+    my ( $session, $params, $topic, $web, $escape ) = @_;
+    $escape = 1 unless defined $escape;
 
     # Have to re-read the topic because content has already been munged
     # by other plugins, or by the extraction of verbatim blocks.
     my ( $meta, $text ) = Foswiki::Func::readTopic( $web, $topic );
 
     $text = TranslateTML2HTML( $text, $web, $topic );
+
+    # Modac #4907: escape to prevent CKEditor messing things up
+    if ($escape) {
+        $text =~ s/&/&amp;/g;
+        $text =~ s/</&lt;/g;
+        $text =~ s/>/&gt;/g;
+    }
 
     # Lift out the text to protect it from further Foswiki rendering. It will be
     # put back in the postRenderingHandler.
@@ -236,7 +244,7 @@ sub _WYSIWYG_TEXT {
 sub _JAVASCRIPT_TEXT {
     my ( $session, $params, $topic, $web ) = @_;
 
-    my $html = _dropBack( _WYSIWYG_TEXT(@_) );
+    my $html = _dropBack( _WYSIWYG_TEXT(@_, 0) );
 
     $html =~ s/([\\'])/\\$1/sg;
     $html =~ s/\r/\\r/sg;
