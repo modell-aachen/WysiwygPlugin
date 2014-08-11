@@ -291,7 +291,7 @@ sub safeEntities {
             # Decode the entity name to unicode
             my $unicode = HTML::Entities::decode_entities("&$entity;");
 
-            $safe_entities->{"$entity"} = $unicode;
+            $safe_entities->{"$entity;"} = $unicode;
         }
     }
     return $safe_entities;
