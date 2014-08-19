@@ -498,6 +498,13 @@ s/<([A-Za-z]+[^>]*?)((?:\s+\/)?)>/"<" . $this->_appendClassToTag($1, 'TMLhtml') 
     $text =~ s/{$TT0/</go;
     $text =~ s/}$TT0/>/go;
 
+    # other entities
+    $text =~ s/&(\w+);/$TT0$1;/g;              # "&abc;"
+    $text =~ s/&(#x?[0-9a-f]+);/$TT0$1;/gi;    # "&#123;"
+    $text =~ s/&/&amp;/g;                           # escape standalone "&"
+    $text =~ s/$TT0(#x?[0-9a-f]+;)/&$1/goi;
+    $text =~ s/$TT0(\w+;)/&$1/go;
+
     # standard URI
     $text =~
 s/((^|(?<=[-*\s(]))$Foswiki::regex{linkProtocolPattern}:[^\s<>"]+[^\s*.,!?;:)<])/$this->_liftOut($1, 'LINK')/geo;
