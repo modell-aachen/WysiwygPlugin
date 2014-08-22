@@ -8,6 +8,7 @@ lib/Foswiki/Plugins/WysiwygPlugin/HTML2TML/Node.pm 0444 Perl module
 lib/Foswiki/Plugins/WysiwygPlugin/HTML2TML.pm 0444 Perl module
 lib/Foswiki/Plugins/WysiwygPlugin.pm 0444 Perl module
 lib/Foswiki/Plugins/WysiwygPlugin/TML2HTML.pm 0444 Perl module
+locale/WysiwygPlugin/cs.po 0664
 locale/WysiwygPlugin/de.po 0664
 locale/WysiwygPlugin/fr.po 0664
 locale/WysiwygPlugin/it.po 0664
