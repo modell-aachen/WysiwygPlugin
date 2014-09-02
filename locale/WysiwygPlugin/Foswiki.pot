@@ -1,27 +1,27 @@
-# WysiwygPlugin translation for Traditional Chinese
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Foswiki $Id\n"
-"Report-Msgid-Bugs-To: osthold@modell-aachen.de\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2010-11-09 08:01+0200\n"
-"Language-Team: Modell Aachen\n"
-"Language: zh_CN\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Pootle 2.0.5\n"
-"X-Poedit-Country: Taiwan\n"
-"X-Poedit-SourceCharset: utf-8\n"
 
 #: lib/Foswiki/Plugins/WysiwygPlugin/TML2HTML.pm
 msgid "(This message will be removed automatically)"
-msgstr "（本信息将被自动删除）"
+msgstr ""
 
 #: lib/Foswiki/Plugins/WysiwygPlugin/TML2HTML.pm
 msgid "Conversion to HTML for WYSIWYG editing is disabled because of the topic content."
-msgstr "因为主题内容，所以无法转换成HTML进行直接编辑。"
+msgstr ""
 
 #: lib/Foswiki/Plugins/WysiwygPlugin/Handlers.pm
 msgid "Empty files cannot be uploaded."
@@ -33,4 +33,4 @@ msgstr ""
 
 #: lib/Foswiki/Plugins/WysiwygPlugin/TML2HTML.pm
 msgid "This is why the conversion is disabled:"
-msgstr "这也为转换不能用的原因："
+msgstr ""

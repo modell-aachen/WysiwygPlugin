@@ -16,9 +16,22 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.0.5\n"
 
+#: lib/Foswiki/Plugins/WysiwygPlugin/TML2HTML.pm
+msgid "(This message will be removed automatically)"
+msgstr ""
+
+#: lib/Foswiki/Plugins/WysiwygPlugin/TML2HTML.pm
+msgid "Conversion to HTML for WYSIWYG editing is disabled because of the topic content."
+msgstr ""
+
+#: lib/Foswiki/Plugins/WysiwygPlugin/Handlers.pm
+msgid "Empty files cannot be uploaded."
+msgstr "Sie dürfen keine leeren Dateien hochladen."
+
 #: lib/Foswiki/Plugins/WysiwygPlugin/Handlers.pm
 msgid "The type of the file you uploaded is not permitted."
 msgstr "Der Typ der hochgeladenen Datei ist nicht zulässig."
 
-msgid "Empty files cannot be uploaded."
-msgstr "Sie dürfen keine leeren Dateien hochladen."
+#: lib/Foswiki/Plugins/WysiwygPlugin/TML2HTML.pm
+msgid "This is why the conversion is disabled:"
+msgstr ""
