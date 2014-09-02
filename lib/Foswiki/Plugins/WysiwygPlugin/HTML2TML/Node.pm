@@ -610,8 +610,8 @@ sub _flatten {
         my ( $f, $t ) = $kid->generate($options);
         if (   !( $options & $WC::KEEP_WS )
             && $text
-            && $text =~ /\w$/
-            && $t =~ /^\w/ )
+            && $text =~ /[\w\*_]$/
+            && $t =~ /^[\w\*_]/ )
         {
 
             # if the last child ends in a \w and this child
