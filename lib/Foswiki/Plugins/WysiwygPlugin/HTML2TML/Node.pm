@@ -1200,6 +1200,20 @@ sub _emphasis {
     $contents =~ s/&#160;/$WC::NBSP/go;
     $contents =~ /^($WC::WS)(.*?)($WC::WS)$/s;
     my ( $pre, $post ) = ( $1, $3 );
+
+    # modac #5666
+    my $parent = $this->{parent};
+    if ( $parent ) {
+        my $ptag = $parent->{tag};
+        # match for any block element
+        if ( $ptag =~ m/^(address|blockquote|center|dir|div|dl|fieldset|form|h\d|hr|isindex|menu|noframes|noscript|ol|p|pre|table|ul)$/i ) {
+            # $WC::WS matches '[\s]*'.
+            # Inserting a single whitespace (if nothing was captured) allows Foswiki to render a wrapped emphasis correctly.
+            $pre = $pre || ' ';
+            $post = $post || ' ';
+        }
+    }
+
     $contents = $2;
     return ( 0, undef ) if ( $contents =~ /^</ || $contents =~ />$/ );
     return ( 0, '' ) unless ( $contents =~ /\S/ );
