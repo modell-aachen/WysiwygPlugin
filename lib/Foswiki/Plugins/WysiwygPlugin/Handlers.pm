@@ -810,17 +810,6 @@ sub _restUpload {
     $fileName    =~ s/\s*$//o;
     $filePath    =~ s/\s*$//o;
 
-    unless (
-        Foswiki::Func::checkAccessPermission(
-            'CHANGE', Foswiki::Func::getWikiName(),
-            undef, $topic, $web
-        )
-      )
-    {
-        returnRESTResult( $response, 401, "Access denied" );
-        return;    # to prevent further processing
-    }
-
     my ( $fileSize, $fileDate, $tmpFileName );
     my $stream = $query->upload('filepath') unless $doPropsOnly;
     my $origName = $fileName;
@@ -838,6 +827,23 @@ sub _restUpload {
             $isSimpleUpload = 1;
             last;
         }
+
+        # update web/topic
+        my $uri = $query->uri;
+        $funcNum = $1 if ( $uri =~ m/CKEditorFuncNum=(\d+)/ );
+        $web = $1 if ( $uri =~ m/w=([^&]+)/ );
+        $topic = $1 if ( $uri =~ m/t=([^&]+)/ );
+    }
+
+    unless (
+        Foswiki::Func::checkAccessPermission(
+            'CHANGE', Foswiki::Func::getWikiName(),
+            undef, $topic, $web
+        )
+      )
+    {
+        returnRESTResult( $response, 401, "Access denied" );
+        return;    # to prevent further processing
     }
 
     unless ($doPropsOnly) {
