@@ -822,9 +822,23 @@ sub _restUpload {
     }
 
     my ( $fileSize, $fileDate, $tmpFileName );
-
     my $stream = $query->upload('filepath') unless $doPropsOnly;
     my $origName = $fileName;
+
+    # See MA #5942
+    my $isSimpleUpload = 0;
+    unless ( $stream ) {
+        my $uploads = $query->uploads;
+        while ( my ($k, $v) = each %$uploads ) {
+            $fileName = $k;
+            $filePath = $k;
+            $origName = $k;
+            $stream = $v->handle;
+
+            $isSimpleUpload = 1;
+            last;
+        }
+    }
 
     unless ($doPropsOnly) {
 
@@ -953,18 +967,25 @@ sub _restUpload {
 
     # Otherwise allow the rest dispatcher to write a 200
     #TODO: Alex, hier muss was getan werden!
-    my $code = 'window.parent.CKEDITOR.tools.callFunction(' . $funcNum . ', "' . $url . '" , "");';
-    if ( Foswiki::Func::getContext()->{SafeWikiSignable} ) {
-        Foswiki::Plugins::SafeWikiPlugin::Signatures::permitInlineCode($code);
+
+    # fix missing funcNum, required by simpleuploads
+    $funcNum = $funcNum || 1;
+    my $code = "window.parent.CKEDITOR.tools.callFunction('$funcNum', '$url', '');";
+
+    $response->header( -status => 200, -type => 'text/html', -charset => 'UTF-8' );
+    if ( $isSimpleUpload ) {
+        # keep it simple, CKE plugin simpleuploads just matches the parenthesis.
+        $response->print( $code );
+    } else {
+        if ( Foswiki::Func::getContext()->{SafeWikiSignable} ) {
+            Foswiki::Plugins::SafeWikiPlugin::Signatures::permitInlineCode($code);
+        }
+
+        my $answer = "<script type=\"text/javascript\">$code</script>";
+        $response->print( $answer );
     }
-    my $answer = "<script type=\"text/javascript\">$code</script>";
-    $response->header(
-        -status => 200,
-        -type => 'text/html',
-        -charset => 'UTF-8',
-    );
-    $response->print($answer);
-    return '';
+
+    return;
 }
 
 sub _unquote {
