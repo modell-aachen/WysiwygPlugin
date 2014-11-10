@@ -5,15 +5,17 @@ msgstr ""
 #: lib/Foswiki/Plugins/WysiwygPlugin/TML2HTML.pm
 msgid "Conversion to HTML for WYSIWYG editing is disabled because of the topic content."
 msgstr ""
+"La conversione in HTML per l'editing WYSIWYG è disabilitato a causa dei "
+"contenuti"
 
 #: lib/Foswiki/Plugins/WysiwygPlugin/Handlers.pm
 msgid "Empty files cannot be uploaded."
-msgstr ""
+msgstr "I files vuoti non possono essere caricati"
 
 #: lib/Foswiki/Plugins/WysiwygPlugin/Handlers.pm
 msgid "The type of the file you uploaded is not permitted."
-msgstr ""
+msgstr "Non è consentito caricare questo tipo di file"
 
 #: lib/Foswiki/Plugins/WysiwygPlugin/TML2HTML.pm
 msgid "This is why the conversion is disabled:"
-msgstr ""
+msgstr "Questo è il motivo per cui la conversione è stata disabilitata:"
