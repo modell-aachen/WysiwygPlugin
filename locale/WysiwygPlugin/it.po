@@ -1,3 +1,19 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-11-10 16:00+0200\n"
+"PO-Revision-Date: 2014-11-10 16:00+0200\n"
+"Last-Translator: Modell Aachen <access@modell-aachen.de>\n"
+"Language-Team: Italian <http://translate.modell-"
+"aachen.de/projects/wysiwygplugin/releasenew-york/it/>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 1.9\n"
+
 #: lib/Foswiki/Plugins/WysiwygPlugin/TML2HTML.pm
 msgid "(This message will be removed automatically)"
 msgstr ""
@@ -6,15 +22,15 @@ msgstr ""
 msgid "Conversion to HTML for WYSIWYG editing is disabled because of the topic content."
 msgstr ""
 "La conversione in HTML per l'editing WYSIWYG è disabilitato a causa dei "
-"contenuti"
+"contenuti."
 
 #: lib/Foswiki/Plugins/WysiwygPlugin/Handlers.pm
 msgid "Empty files cannot be uploaded."
-msgstr "I files vuoti non possono essere caricati"
+msgstr "I files vuoti non possono essere caricati."
 
 #: lib/Foswiki/Plugins/WysiwygPlugin/Handlers.pm
 msgid "The type of the file you uploaded is not permitted."
-msgstr "Non è consentito caricare questo tipo di file"
+msgstr "Non è consentito caricare questo tipo di file."
 
 #: lib/Foswiki/Plugins/WysiwygPlugin/TML2HTML.pm
 msgid "This is why the conversion is disabled:"
