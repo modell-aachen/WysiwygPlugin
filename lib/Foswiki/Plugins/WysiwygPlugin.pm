@@ -68,25 +68,25 @@ sub initPlugin {
         sub { _execute( '_restTML2HTML', @_ ) },
         validate => 0,
         authenticate => 0,
-        allow => 'POST',
+        http_allow => 'POST',
     );
     Foswiki::Func::registerRESTHandler( 'html2tml',
         sub { _execute( '_restHTML2TML', @_ ) },
         validate => 0,
         authenticate => 0,
-        allow => 'POST',
+        http_allow => 'POST',
     );
     Foswiki::Func::registerRESTHandler( 'upload',
         sub { _execute( '_restUpload', @_ ) },
         validate => 0,
         authenticate => 0,
-        allow => 'POST',
+        http_allow => 'POST',
     );
     Foswiki::Func::registerRESTHandler( 'attachments',
         sub { _execute( '_restAttachments', @_ ) },
         validate => 0,
         authenticate => 0,
-        allow => 'POST,GET',
+        http_allow => 'POST,GET',
     );
 
     # Plugin correctly initialized
