@@ -40,7 +40,7 @@ my $TT3 = chr(3);    # Temporarily hides noautolink %macros at various points
 # is common for href attributes to contain macros. Users should
 # be encouraged to use square bracket formulations for links instead.
 
-# Modac: A ist wieder hinzugefügt.
+# Modac: A ist wieder hinzugefuegt.
 my @PALATABLE_TAGS = qw(
   A ABBR ACRONYM ADDRESS B BDO BIG BLOCKQUOTE BR CAPTION CITE CODE COL
   COLGROUP DD DEL DFN DIR DIV DL DT EM FONT H1 H2 H3 H4 H5 H6 HR HTML I IMG INS

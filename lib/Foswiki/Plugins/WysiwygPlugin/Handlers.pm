@@ -846,7 +846,7 @@ sub _restUpload {
         return;    # to prevent further processing
     }
     
-    # Dateipfad auslesen und zur weiteren Bearbeitung zurückgeben
+    # Dateipfad auslesen und zur weiteren Bearbeitung zurueckgeben
     my $url = '';
     $url .= Foswiki::Func::getPubUrlPath();
     if ( $url !~ /^[a-z]+:/ ) {

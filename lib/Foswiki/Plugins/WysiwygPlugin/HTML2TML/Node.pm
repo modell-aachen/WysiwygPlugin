@@ -652,7 +652,7 @@ sub _htmlParams {
   ATTR: for my $k ( sort keys %$attrs ) {
         next ATTR unless $k;
         my $v = $attrs->{$k};
-        #Modac: Hier muss die Klasse übergeben werden
+        #Modac: Hier muss die Klasse uebergeben werden
         #Modac: class
         if ( $k eq 'class' ) {
             my @classes;
