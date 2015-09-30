@@ -635,6 +635,7 @@ sub returnRESTResult {
 sub _restTML2HTML {
     my ( $session, $plugin, $verb, $response ) = @_;
     my $tml = Foswiki::Func::getCgiQuery()->param('text');
+    $tml = '' unless defined $tml;
 
     # if the secret ID is present, don't convert again. We are probably
     # going 'back' to this page (doesn't work on IE :-( )
