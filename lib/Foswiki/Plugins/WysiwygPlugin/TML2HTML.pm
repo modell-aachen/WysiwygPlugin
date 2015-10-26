@@ -19,7 +19,7 @@ TML syntax is not supported.
 
 package Foswiki::Plugins::WysiwygPlugin::TML2HTML;
 
-use CGI qw( -any );
+use CGI qw( );
 use Error qw( :try );
 
 use Foswiki;
