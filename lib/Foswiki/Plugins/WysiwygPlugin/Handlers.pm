@@ -11,6 +11,8 @@ use Error (':try');
 
 use CGI qw( :cgi );
 
+use Scalar::Util qw( openhandle );
+
 use Encode ();
 
 use Foswiki::Func                              ();    # The plugins API
@@ -720,7 +722,7 @@ sub _restUpload {
 
     # See MA #5942
     my $isSimpleUpload = 0;
-    unless ( $stream ) {
+    unless ( $stream && openhandle($stream) ) {
         my $uploads = $query->uploads;
         while ( my ($k, $v) = each %$uploads ) {
             $fileName = $k;
