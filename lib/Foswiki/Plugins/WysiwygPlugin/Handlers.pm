@@ -791,7 +791,7 @@ sub _restUpload {
     }
 
     # SMELL: use of undocumented CGI::tmpFileName
-    my $filepathParam = $query->param('filepath');
+    my $filepathParam = $query->param('filepath') || 'filepath';
     my $tfp = $query->tmpFileName( $filepathParam );
     my $error;
     try {
