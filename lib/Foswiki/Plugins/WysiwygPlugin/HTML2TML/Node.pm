@@ -1435,15 +1435,16 @@ sub _handleA {
             $href = $this->{context}->{rewriteURL}->( $href, $this->{context} );
         }
         my $nop = ( $options & $WC::NOP_ALL ) ? '<nop>' : '';
-        if ( $text eq $href ) {
-            return ( 0, $WC::CHECKw . '[' . $nop . '[' . $href . ']]' );
-        }
 
         # we must quote square brackets in [[...][...]] notation
         $text =~ s/[[]/&#91;/g;
         $text =~ s/[]]/&#93;/g;
         $href =~ s/[[]/%5B/g;
         $href =~ s/[]]/%5D/g;
+
+        if ( $text eq $href ) {
+            return ( 0, $WC::CHECKw . '[' . $nop . '[' . $href . ']]' );
+        }
 
         return ( 0,
             $WC::CHECKw . '[' . $nop . '[' . $href . '][' . $text . ']]' );
