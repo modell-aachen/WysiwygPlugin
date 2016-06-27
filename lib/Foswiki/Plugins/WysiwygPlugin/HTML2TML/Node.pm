@@ -1463,7 +1463,7 @@ sub _handleA {
 
 sub _handleABBR    { return _flatten(@_); }
 sub _handleACRONYM { return _flatten(@_); }
-sub _handleADDRESS { return _flatten(@_); }
+# sub _handleADDRESS { return _flatten(@_); }
 
 sub _handleB { return _emphasis( @_, '*' ); }
 sub _handleBASE     { return ( 0, '' ); }

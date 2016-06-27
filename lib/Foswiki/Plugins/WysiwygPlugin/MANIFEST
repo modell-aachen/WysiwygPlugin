@@ -11,6 +11,7 @@ lib/Foswiki/Plugins/WysiwygPlugin/TML2HTML.pm 0444 Perl module
 locale/WysiwygPlugin/cs.po 0664
 locale/WysiwygPlugin/de.po 0664
 locale/WysiwygPlugin/fr.po 0664
+locale/WysiwygPlugin/hu.po 0644
 locale/WysiwygPlugin/it.po 0664
 locale/WysiwygPlugin/zh-cn.po 0664
 data/System/WysiwygPlugin.txt 0664 Documentation and settings

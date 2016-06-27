@@ -65,13 +65,29 @@ sub initPlugin {
         sub { _execute( '_SECRET_ID', @_ ) } );
 
     Foswiki::Func::registerRESTHandler( 'tml2html',
-        sub { _execute( '_restTML2HTML', @_ ) } );
+        sub { _execute( '_restTML2HTML', @_ ) },
+        validate => 0,
+        authenticate => 0,
+        allow => 'POST',
+    );
     Foswiki::Func::registerRESTHandler( 'html2tml',
-        sub { _execute( '_restHTML2TML', @_ ) } );
+        sub { _execute( '_restHTML2TML', @_ ) },
+        validate => 0,
+        authenticate => 0,
+        allow => 'POST',
+    );
     Foswiki::Func::registerRESTHandler( 'upload',
-        sub { _execute( '_restUpload', @_ ) } );
+        sub { _execute( '_restUpload', @_ ) },
+        validate => 0,
+        authenticate => 0,
+        allow => 'POST',
+    );
     Foswiki::Func::registerRESTHandler( 'attachments',
-        sub { _execute( '_restAttachments', @_ ) } );
+        sub { _execute( '_restAttachments', @_ ) },
+        validate => 0,
+        authenticate => 0,
+        allow => 'POST,GET',
+    );
 
     # Plugin correctly initialized
     return 1;
