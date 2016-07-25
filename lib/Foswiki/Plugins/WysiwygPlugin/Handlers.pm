@@ -801,7 +801,7 @@ sub _restUpload {
             $web, $topic,
             $fileName,
             {
-                dontlog     => !$Foswiki::cfg{Log}{upload},
+                dontlog     => !$Foswiki::cfg{Log}{Action}{upload},
                 comment     => $fileComment,
                 hide        => $hideFile,
                 createlink  => $createLink,
