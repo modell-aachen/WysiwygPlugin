@@ -765,7 +765,7 @@ sub _restUpload {
             $fileDate = $stats[9];
         }
 
-        unless ( $fileSize && $fileName ) {
+        if ( !$fileSize || !$fileName ) {
             my $code = "window.parent.CKEDITOR.tools.callFunction($funcNum, '', \"".
                 $session->i18n->maketext("Empty files cannot be uploaded.") .
                 '");';
