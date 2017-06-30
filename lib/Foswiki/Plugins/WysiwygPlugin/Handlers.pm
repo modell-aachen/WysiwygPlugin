@@ -532,7 +532,7 @@ sub protectedByAttr {
           Foswiki::Func::getPreferencesValue('WYSIWYGPLUGIN_STICKYBITS')
           || <<'DEFAULT';
 (?!img).*=id,lang,title,dir,on.*;
-a=accesskey,coords,shape,target;
+a=accesskey,coords,shape,target,data-topictitle;
 bdo=dir;
 br=clear;
 col=char,charoff,span,valign,width;
