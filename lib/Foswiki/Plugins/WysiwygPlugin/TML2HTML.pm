@@ -33,6 +33,7 @@ my $TT0 = chr(0);
 my $TT1 = chr(1);
 my $TT2 = chr(2);
 my $TT3 = chr(3);    # Temporarily hides noautolink %macros at various points
+my $TT4 = chr(4);    # protect SCRIPTURL... in hrefs
 
 # HTML elements that are palatable to editors. Other HTML tags will be
 # rendered in 'protected' regions to prevent the WYSIWYG editor mussing
@@ -419,6 +420,8 @@ sub _getRenderedVersion {
         $text =~ s/(<(?i:$stickyTag)[^>]*>.*?<\/(?i:$stickyTag)>)/
           $this->_liftOut($1, 'PROTECTED')/geis;
     }
+
+    $text = $this->_protectHrefs($text);
 
     # Protect comments
     $text =~ s/(<!--.*?-->)/$this->_liftOut($1, 'PROTECTED')/ges;
@@ -861,6 +864,8 @@ s/$startww(($Foswiki::regex{webNameRegex}\.)?$Foswiki::regex{wikiWordRegex}($Fos
     # Substitute back in protected elements
     $text = $this->_dropBack($text);
 
+    $text = $this->_unprotectHrefs($text);
+
     # Item1417: Insert a paragraph at the start of the document if the first tag
     # is a table (possibly preceded one of several specific tags) so that it is
     # possible to place the cursor *above* the table.
@@ -1280,10 +1285,26 @@ qr/^((?:\t|   )+\*\s+(?:Set|Local)\s+(?:$Foswiki::regex{tagNameRegex})\s*=)(.*)$
     return join( "\n", @outtext );
 }
 
-sub _takeOutCustomTags {
+sub _protectHrefs {
     my ( $this, $text ) = @_;
 
-    my $xmltags = $this->{opts}->{xmltag};
+    $this->{hrefs} ||= [];
+
+    $text =~ s#\b(href=['"])(%SCRIPTURL(?:PATH)?(?:\{[^}]*\})?%)#push @{$this->{hrefs}}, $2; $1.$TT4. (scalar @{$this->{hrefs}} -1).$TT4;#ge;
+
+    return $text;
+}
+
+sub _unprotectHrefs {
+    my ( $this, $text ) = @_;
+
+    $text =~ s#$TT4(\d+)$TT4#$this->{hrefs}->[$1]#ge;
+
+    return $text;
+}
+
+sub _takeOutCustomTags {
+    my ( $this, $text ) = @_;
 
     # Take out custom XML tags
     sub _takeOutCustomXmlProcess {
