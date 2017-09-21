@@ -828,9 +828,9 @@ sub _restUpload {
         close($stream) if $stream;
     };
 
-    if (defined $error && $error =~ /You cannot upload this attachment/) {
+    if (defined $error) {
         my $code = 'window.parent.CKEDITOR.tools.callFunction('.$funcNum.', "", "'.
-            $session->i18n->maketext("The type of the file you uploaded is not permitted.")
+            $session->i18n->maketext("Upload failed. The type of the file you uploaded is probably not permitted.")
             .'");';
         if (Foswiki::Func::getContext()->{SafeWikiSignable}) {
             Foswiki::Plugins::SafeWikiPlugin::Signatures::permitInlineCode($code);
@@ -844,11 +844,6 @@ sub _restUpload {
         return '';
     }
 
-    if ($error) {
-        returnRESTResult( $response, 500, $error );
-        return;    # to prevent further processing
-    }
-    
     # Dateipfad auslesen und zur weiteren Bearbeitung zurueckgeben
     my $url = '';
     $url .= Foswiki::Func::getPubUrlPath();
