@@ -29,8 +29,8 @@ msgid "Empty files cannot be uploaded."
 msgstr "Sie dürfen keine leeren Dateien hochladen."
 
 #: lib/Foswiki/Plugins/WysiwygPlugin/Handlers.pm
-msgid "The type of the file you uploaded is not permitted."
-msgstr "Der Typ der hochgeladenen Datei ist nicht zulässig."
+msgid "Upload failed. The type of the file you uploaded is probably not permitted."
+msgstr "Upload fehlgeschlagen. Der Typ der hochgeladenen Datei ist wahrscheinlich nicht zulässig."
 
 #: lib/Foswiki/Plugins/WysiwygPlugin/TML2HTML.pm
 msgid "This is why the conversion is disabled:"
