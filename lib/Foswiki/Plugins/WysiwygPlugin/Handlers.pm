@@ -103,10 +103,23 @@ sub beforeEditHandler {
     }
 }
 
+sub _cleanAutoIncPubUrls {
+    #my( $text, $resolvedTopic, $web ) = @_;
+    my $web = $_[2];
+
+    my $autoIncTopic = $Foswiki::Plugins::SESSION->{topicName}; # unresolved topic
+
+    my $pubUrl = Foswiki::Func::getPubUrlPath($web, $autoIncTopic);
+    my $pubUrlAbsolute = Foswiki::Func::getPubUrlPath($web, $autoIncTopic, undef, {absolute => 1});
+    $_[0] =~ s#\%PUBURL(?:PATH)?\%/+$web/+$autoIncTopic/|$pubUrl|$pubUrlAbsolute#%ATTACHURLPATH%/#g;
+}
+
 # This handler is only invoked *after* merging is complete
 sub beforeSaveHandler {
-
     #my( $text, $topic, $web ) = @_;
+
+    _cleanAutoIncPubUrls(@_) if($Foswiki::Plugins::SESSION->{topicName} =~ m#AUTOINC\d#);
+
     my $query = Foswiki::Func::getCgiQuery();
     return unless $query;
 
