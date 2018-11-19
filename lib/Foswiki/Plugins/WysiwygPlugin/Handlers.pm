@@ -110,7 +110,7 @@ sub _cleanAutoIncPubUrls {
     my $autoIncTopic = $Foswiki::Plugins::SESSION->{topicName}; # unresolved topic
 
     my $pubUrl = Foswiki::Func::getPubUrlPath($web, $autoIncTopic);
-    my $pubUrlAbsolute = Foswiki::Func::getPubUrlPath($web, $autoIncTopic, undef, {absolute => 1});
+    my $pubUrlAbsolute = Foswiki::Func::getPubUrlPath($web, $autoIncTopic, undef, absolute => 1);
     $_[0] =~ s#\%PUBURL(?:PATH)?\%/+$web/+$autoIncTopic/|$pubUrl|$pubUrlAbsolute#%ATTACHURLPATH%/#g;
 }
 
